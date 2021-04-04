@@ -1,0 +1,61 @@
+import os
+import pathlib
+import glob
+
+src = pathlib.Path('')
+atpg_dir = src.joinpath('ATPG')
+
+class Test():
+    def __init__(self, type, test):
+        self.type = type
+        self.test = test
+        self.log_dir = src.joinpath('sage/WORK/' + self.test + '_' + self.type + 'log')
+
+def create_dirs():
+    main_dir = []
+    sub_dict ={}
+    main_dir_list = ['sage', 'global', 'json', 'scripts']
+    sub_test_list = ['stuckat','atspeed']
+    sub_type_list = ['bypass', 'edt']
+    sub_sage_list = ['log', 'model', 'netlist', 'patterns', 'pattern_links']
+
+    for i in main_dir_list:
+        os.makedirs(i, exist_ok=True)
+        main_dir.append(src.joinpath(i))
+
+
+    for i in sub_test_list:
+        for j in sub_type_list:
+            for z in sub_sage_list:
+                os.makedirs(i+'_'+j+'/'+z, exist_ok=True)
+
+work_dir = src.joinpath('sage/WORK')
+os.makedirs(work_dir, exist_ok=True)
+
+def copy_files():
+    sub_atpg = ['/', '/bypass/']
+    sub_temp = os.listdir(src + '/ATPG')
+    sub_test = []
+    for j in sub_temp:
+        if j[:7] == 'at_speed' or 'stuck_at' :
+            sub_test.append(j)
+
+    os.system('cp -rf /nfs/iil/proj/icl/icl.ice_post_si.reg.1/users/ylavi1/ADL/DDRIO_WW16Model/HVM_rel/FIRE_DB_ready_v02/2020_ww21_thu.CI/sage/WORK/proj_common '+ work_dir)
+
+    for i in sub_atpg:
+        for z in sub_test:
+            temp_log = glob.glob(atpg_dir + i + sub_test + '/testkompress*')
+            os.system('cp -v' + atpg_dir + i + sub_test + '/' + temp_log)
+
+
+
+
+
+
+
+
+
+
+
+
+
